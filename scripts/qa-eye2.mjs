@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer';
+const b=await puppeteer.launch({headless:'new',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const p=await b.newPage();await p.setViewport({width:1600,height:900});
+const errs=[];p.on('console',m=>{if(m.type()==='error')errs.push(m.text().slice(0,160))});p.on('pageerror',e=>errs.push('PAGEERR '+e.message));
+p.on('response',r=>{if(r.status()>=400)errs.push(r.status()+' '+r.url().slice(0,120))});
+await p.goto('http://127.0.0.1:3017/',{waitUntil:'domcontentloaded'});await new Promise(r=>setTimeout(r,35000));
+const ok=await p.evaluate(()=>{const b=[...document.querySelectorAll('button')].find(x=>/live contacts/i.test(x.textContent));b?.click();return !!b});
+await new Promise(r=>setTimeout(r,40000));
+await p.screenshot({path:'/workspace/eye-qa/live-contacts.png'});
+await p.evaluate(()=>{const b=[...document.querySelectorAll('button')].find(x=>/data layers/i.test(x.textContent));b?.click()});
+await new Promise(r=>setTimeout(r,3000));await p.screenshot({path:'/workspace/eye-qa/layers-panel.png'});
+console.log(ok, [...new Set(errs)].slice(0,30).join('\n'));await b.close();

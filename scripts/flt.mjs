@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer';
+const b=await puppeteer.launch({headless:'new',protocolTimeout:120000,args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+const p=await b.newPage();await p.setViewport({width:1600,height:900});
+const W=ms=>new Promise(r=>setTimeout(r,ms));
+await p.goto('http://127.0.0.1:3017/',{waitUntil:'domcontentloaded'});await W(25000);
+await p.click('[data-tab="air"]');await p.click('[data-toggle="flights"]');await W(12000);
+const pt=await p.evaluate(()=>{const v=window.__anorixViewer;const R=v.scene.canvas.getBoundingClientRect();const cols=[];const walk=c=>{if(!c)return;if(/BillboardCollection/.test(c.constructor?.name))cols.push(c);else if(c.length!==undefined&&c.get)for(let i=0;i<c.length;i++)walk(c.get(i));};walk(v.scene.primitives);
+ for(const col of cols)for(let i=0;i<col.length;i+=7){const it=col.get(i);if(!it.show)continue;const c=v.scene.cartesianToCanvasCoordinates(it.position);if(!c)continue;const x=c.x+R.left,y=c.y+R.top;if(x<100||x>1150||y<100||y>700)continue;const pk=v.scene.pick(c);if(pk){const id=pk.id;return{x,y,cx:c.x,cy:c.y,t:typeof id,ctor:id?.constructor?.name,keys:id&&typeof id==='object'?Object.keys(id).slice(0,15):String(id).slice(0,40),prim:pk.primitive?.constructor?.name}}}return null});
+console.log(JSON.stringify(pt));
+await p.mouse.click(pt.x,pt.y);await W(20000);console.log(await p.evaluate(()=>{const v=window.__anorixViewer;return " h="+Math.round(v.camera.positionCartographic.height)+" globe="+v.scene.globe.show+" tiles="+v.scene.globe.tilesLoaded+" tracked="+!!v.trackedEntity+" body="+document.body.className.slice(0,150)}));
+console.log(await p.evaluate(()=>document.querySelector('.ax-panel').dataset.view+' | '+document.querySelector('.ax-title').textContent));
+await p.screenshot({path:'/workspace/eye-qa5/flight-tracking.png'});await b.close();

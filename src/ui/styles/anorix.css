@@ -1,0 +1,119 @@
+/* Anorix Eye shell: exact Anorix Cosmos / Globe UI system. Original God's Eye UI is fully hidden. */
+@font-face{font-family:'Geist';src:url('/Geist-Variable.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Geist Mono';src:url('/GeistMono-Variable.woff2') format('woff2');font-weight:100 900;font-display:swap}
+:root{color-scheme:dark;--bg:#000;--bg-1:#0a0a0a;--bg-2:#111;--bg-3:#1a1a1a;--card:var(--bg-1);--ink:#ededed;--fg-0:#fff;--fg-1:#ededed;--fg-2:#b4b4b4;--fg-3:#8a8a8a;--fg-4:#525252;--line:#1f1f1f;--line-strong:#2e2e2e;--pill:#fff;--pill-ink:#000;--pill-soft:#111;--row:#111;--accent:#3b82f6;--ease-out:cubic-bezier(.16,1,.3,1);--ax-sans:'Geist',ui-sans-serif,system-ui,sans-serif;--ax-mono:'Geist Mono',ui-monospace,monospace}
+:root[data-theme="light"]{color-scheme:light;--bg:#fff;--bg-1:#fafafa;--bg-2:#f4f4f5;--bg-3:#e9e9eb;--card:var(--bg-1);--ink:#0a0a0a;--fg-0:#000;--fg-1:#0a0a0a;--fg-2:#3f3f46;--fg-3:#71717a;--fg-4:#a1a1aa;--line:#e4e4e7;--line-strong:#d4d4d8;--pill:#0a0a0a;--pill-ink:#fff;--pill-soft:#f4f4f5;--row:#f4f4f5;--accent:#2563eb}
+html,body{overflow:hidden!important;height:100%;overscroll-behavior:none;margin:0}
+html{background:radial-gradient(1100px 700px at 32% 45%,rgba(70,90,160,.18),transparent 65%),radial-gradient(900px 600px at 85% 85%,rgba(120,90,170,.10),transparent 60%),#02030a}
+body{background:transparent!important;font-family:var(--ax-sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+*::-webkit-scrollbar{width:0;height:0}*{scrollbar-width:none}
+/* hide every original UI element */
+html.anorix-shell body>*:not(#cesiumContainer):not(.ax-header):not(.ax-panel):not(.hud):not(#anorix-tip):not(#cesium-credits):not(#world-overlay-root):not(#toast):not(script){display:none!important}
+html.anorix-shell #cesiumContainer>*:not(.cesium-viewer):not(#world-overlay-root):not(canvas){display:none!important}
+#cesiumContainer{position:fixed!important;inset:0!important;width:100%!important;height:100%!important}
+#cesiumContainer,#cesiumContainer canvas,.cesium-viewer,.cesium-widget{background:transparent!important}
+@media (min-width:768px){#cesiumContainer{left:-380px!important;width:calc(100% + 380px)!important;right:auto!important}}
+body.anorix-far #world-overlay-root{opacity:0}#world-overlay-root{transition:opacity .3s}
+/* living starfield */
+body::after{content:'';position:fixed;inset:-50%;z-index:-1;pointer-events:none;background-image:radial-gradient(1px 1px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 140px 80px,#fff,transparent),radial-gradient(1.6px 1.6px at 90px 160px,#fff,transparent),radial-gradient(1px 1px at 200px 120px,rgba(255,255,255,.8),transparent),radial-gradient(1.2px 1.2px at 260px 220px,#fff,transparent),radial-gradient(1px 1px at 40px 210px,rgba(255,255,255,.7),transparent),radial-gradient(2px 2px at 170px 20px,rgba(255,255,255,.9),transparent),radial-gradient(1px 1px at 230px 60px,#fff,transparent);background-size:280px 240px;opacity:.8;animation:ax-drift 240s linear infinite}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(1px 1px at 60px 90px,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 300px 40px,rgba(255,255,255,.5),transparent),radial-gradient(1.4px 1.4px at 180px 300px,rgba(255,255,255,.7),transparent);background-size:420px 360px;animation:ax-twinkle 6s ease-in-out infinite alternate}
+@keyframes ax-drift{to{transform:translate3d(280px,240px,0)}}@keyframes ax-twinkle{from{opacity:.35}to{opacity:.9}}
+/* header (Cosmos .site-header) */
+.ax-header{position:fixed;inset:0 0 auto 0;z-index:30;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 28px;pointer-events:none}
+.ax-header>*{pointer-events:auto}
+.ax-brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;min-width:0}
+.eyebrow{font-family:var(--ax-mono);font-size:12px;font-weight:500;letter-spacing:.08em;line-height:1;text-transform:uppercase;color:var(--fg-3)}
+.wordmark{font-size:22px;font-weight:300;letter-spacing:-.04em;color:#fff}
+:root[data-theme="light"] .wordmark{color:#fff}
+.ax-search{flex:0 1 380px;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:999px;background:rgba(17,17,17,.72);backdrop-filter:blur(10px);color:var(--fg-3)}
+.ax-search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#ededed;font:450 13px var(--ax-sans)}
+.ax-nav{display:flex;align-items:center;gap:8px}
+.ax-theme{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;border:0;background:transparent;color:#b4b4b4;cursor:pointer;transition:background-color .15s,color .15s}
+.ax-theme:hover{background:#111;color:#fff}
+.g-btn{display:inline-flex;height:32px;align-items:center;gap:8px;border-radius:999px;padding:0 12px;font:500 13px var(--ax-sans);border:0;cursor:pointer;transition:background-color .15s var(--ease-out)}
+.g-btn-solid{background:var(--pill);color:var(--pill-ink)}
+.g-btn-soft{background:rgba(17,17,17,.72);color:#ededed;backdrop-filter:blur(10px)}
+.g-btn-soft:hover{background:#1f1f1f}
+/* side panel (Cosmos .cosmos-panel / dossier) */
+.ax-panel{position:fixed;z-index:20;top:80px;right:20px;bottom:20px;width:360px;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);border-radius:28px;padding:28px 24px 0;color:var(--ink);font-family:var(--ax-sans);transition:transform .45s var(--ease-out),opacity .3s}
+.ax-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.ax-title{margin:8px 0 0;font-size:32px;line-height:1;font-weight:300;letter-spacing:-.045em;color:var(--fg-0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+.ax-count{margin:0 0 4px;font:11px var(--ax-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--fg-3)}
+.tabs{display:flex;flex-wrap:wrap;margin:18px 0 0;border-bottom:1px solid var(--line)}
+.tab{background:transparent;border:0;color:var(--fg-3);padding:10px 12px;font:500 13px var(--ax-sans);cursor:pointer}
+.tab:first-child{padding-left:0}
+.tab:hover{color:var(--fg-0)}
+.tab[aria-selected="true"]{color:var(--fg-0);box-shadow:inset 0 -1px 0 var(--accent)}
+.ax-body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:8px 0 16px}
+.ax-list{list-style:none;margin:0;padding:0}
+.ax-row{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;margin:0 -12px;width:calc(100% + 24px);border:0;border-radius:16px;background:transparent;color:inherit;text-align:left;cursor:pointer;font:inherit;transition:background-color .15s}
+li.ax-row{cursor:default}
+.row-hover:hover,.ax-row:hover{background:var(--row)}
+.ax-row-main{display:flex;flex-direction:column;min-width:0}
+.ax-name{font-size:14px;color:var(--fg-1)}
+.ax-sub{margin-top:2px;font-size:13px;color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ax-row-side{display:flex;align-items:center;gap:12px;flex:none}
+.ax-num{font:12px var(--ax-mono);color:var(--fg-1);font-variant-numeric:tabular-nums}
+.ax-switch{position:relative;width:32px;height:18px;border-radius:999px;background:var(--line-strong);transition:background .2s}
+.ax-switch::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:999px;background:var(--fg-0);transition:transform .25s var(--ease-out)}
+.ax-switch[data-on="true"]{background:var(--accent)}
+.ax-switch[data-on="true"]::after{transform:translateX(14px);background:#fff}
+.ax-switch[data-busy="true"]{opacity:.5}
+.ax-note{font-size:14px;line-height:1.6;color:var(--fg-2);margin:12px 0}
+.ax-note a{color:var(--fg-0)}
+.ax-foot{flex:none;padding:16px 0;font-size:12px;color:var(--fg-3)}
+.fact-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);margin:16px 0 0}
+.fact-grid div{min-width:0;padding:12px 12px 12px 0;border-bottom:1px solid var(--line)}
+.fact-grid dt{color:var(--fg-3);font:11px var(--ax-mono);letter-spacing:.08em;text-transform:uppercase}
+.fact-grid dd{margin:4px 0 0;color:var(--fg-0);font-size:15px;font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums;word-break:break-word}
+.ax-panel[data-view="detail"] .ax-body{animation:ax-in .35s var(--ease-out)}
+@keyframes ax-in{from{opacity:0;transform:translateY(8px)}}
+/* bottom-left HUD (Cosmos .hud) */
+.hud{position:fixed;z-index:5;left:22px;bottom:16px;width:min(460px,calc(100% - 44px));background:var(--card);border-radius:0;padding:18px 2px 4px;box-shadow:inset 0 1px 0 var(--line);font-family:var(--ax-sans)}
+:root:not([data-theme="light"]) .hud{background:transparent}
+.hud-row{display:flex;align-items:baseline;gap:16px;min-width:0}
+.hud-date{font-variant-numeric:tabular-nums;font-weight:500;letter-spacing:-.045em;color:var(--fg-0);font-size:22px;line-height:1}
+.hud-meta{margin:0 0 0 auto;color:var(--fg-3);font:10px var(--ax-mono);letter-spacing:.08em;text-transform:uppercase}
+.hud-actions{display:flex;flex-wrap:wrap;gap:0 18px;margin-top:12px}
+.hud-btn{padding:0;border:0;background:transparent;color:var(--fg-2);font:450 13px var(--ax-sans);line-height:1.4;cursor:pointer}
+.hud-btn:hover{color:var(--fg-0)}
+.icon-btn{display:inline-flex;align-items:center;border:0;background:transparent;color:var(--fg-0);padding:0 2px 0 0;cursor:pointer}
+/* tooltip */
+#anorix-tip{position:fixed;left:0;top:0;z-index:60;pointer-events:none;padding:6px 12px;border-radius:999px;background:var(--bg);color:var(--fg-0);font:500 12px var(--ax-sans);box-shadow:0 0 0 1px var(--line),0 16px 48px -12px rgba(0,0,0,.6)}
+#anorix-tip[hidden]{display:none}
+/* credits stay (required attribution), quiet */
+#cesium-credits{position:fixed!important;left:22px!important;bottom:118px!important;z-index:4;opacity:.45;font:10px var(--ax-sans)!important;max-width:460px}
+#cesium-credits *{font-family:var(--ax-sans)!important}
+#toast{font-family:var(--ax-sans)!important}
+/* mobile bottom sheet */
+@media (max-width:767px){
+ .ax-header{padding:0 16px}.ax-search{display:none}.ax-hide-sm{display:none}
+ .ax-panel{top:auto;left:0;right:0;bottom:0;width:auto;height:42dvh;border-radius:28px 28px 0 0;padding:24px 20px 0}
+ .hud{left:16px;right:16px;bottom:calc(42dvh + 12px);width:auto}
+ #cesiumContainer{bottom:42dvh!important;height:auto!important}
+ #cesium-credits{display:none}
+}
+#world-overlay-detection-surface,#scope-mask{display:none!important}
+:root[data-theme="light"] .hud{background:rgba(255,255,255,.92);padding:16px 16px 8px;border-radius:20px}
+:root[data-theme="light"] .ax-search{background:rgba(255,255,255,.9);color:#71717a}
+:root[data-theme="light"] .ax-search input{color:#0a0a0a}
+:root[data-theme="light"] .g-btn-soft{background:rgba(255,255,255,.9);color:#0a0a0a}
+:root[data-theme="light"] .ax-theme{background:rgba(255,255,255,.9);color:#0a0a0a}
+@media (max-width:767px){.ax-header{background:linear-gradient(#000c,#0000)}.ax-nav .g-btn{height:30px;padding:0 10px}}
+.ax-search{position:relative}
+.ax-suggest{position:absolute;left:0;right:0;top:42px;margin:0;padding:6px;list-style:none;background:var(--bg);border-radius:20px;box-shadow:0 0 0 1px var(--line),0 16px 48px -12px rgba(0,0,0,.6);z-index:40}
+.ax-suggest[hidden]{display:none}
+.ax-suggest li{display:flex;flex-direction:column;padding:10px 12px;border-radius:14px;cursor:pointer}
+.ax-suggest li[aria-selected="true"],.ax-suggest li:hover{background:var(--row)}
+.ax-s-name{font-size:14px;color:var(--fg-0)}
+.ax-s-sub{font-size:12px;color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ax-credit{margin:18px 0 4px;font-size:11px;color:var(--fg-4)}
+
+/* Category search ("schools in Lahore") */
+.ax-suggest li.ax-cat{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;cursor:default;border-bottom:1px solid var(--line);border-radius:14px 14px 0 0}
+.ax-cat-clear{font:inherit;font-size:12px;color:var(--fg-3,#9a9a9a);background:none;border:0;cursor:pointer;padding:2px 6px;border-radius:8px}
+.ax-cat-clear:hover{color:var(--fg,#ededed)}
+.ax-row[data-unavailable]{opacity:.55;cursor:not-allowed}
+.ax-shake{animation:ax-shake .32s ease-out}
+@keyframes ax-shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.ax-shake{animation:none}}
